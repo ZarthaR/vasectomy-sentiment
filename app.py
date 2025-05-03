@@ -5,11 +5,19 @@ import joblib
 import re
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing.text import tokenizer_from_json
+import json
+import os
 
 app = Flask(__name__)
 
 # Load tokenizer dan model
-tokenizer = joblib.load("tokenizer.joblib")
+#tokenizer = joblib.load("tokenizer.joblib")
+# Load tokenizer dari tokenizer.json
+with open("tokenizer.json") as f:
+    tokenizer = tokenizer_from_json(f.read())
+
+
 model = load_model("model_sentimen_lstm.h5")
 
 # Label mapping
@@ -45,4 +53,4 @@ def klasifikasi():
     return render_template("index.html", hasil=hasil, komentar=komentar)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

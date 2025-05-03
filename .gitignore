@@ -1,6 +1,11 @@
 __pycache__/
 *.pyc
 *.h5
+*.joblib
+*.csv
+*.xlsx
 *.pkl
 .env
-tokenizer.json
+.DS_Store
+.idea/
+.vscode/

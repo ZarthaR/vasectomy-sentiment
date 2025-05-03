@@ -9,9 +9,11 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding, LSTM, Dense, Dropout
+from tensorflow.keras.preprocessing.text import tokenizer_from_json
+import json
 
 # ======== BACA DATA =========
-df = pd.read_csv("komentar_preprocessed_terbaru.csv")
+df = pd.read_csv("komentar_preprocessed_updated.csv")
 df = df.dropna(subset=["komentar_bersih", "sentimen"])
 
 # ======== ENCODE LABEL SENTIMEN =========
@@ -39,6 +41,13 @@ max_len = 50
 
 tokenizer = Tokenizer(num_words=max_words, oov_token="<OOV>")
 tokenizer.fit_on_texts(df_balanced["komentar_bersih"])
+
+
+
+# Simpan tokenizer sebagai JSON
+with open("tokenizer.json", "w") as f:
+    f.write(tokenizer.to_json())
+
 
 sequences = tokenizer.texts_to_sequences(df_balanced["komentar_bersih"])
 padded = pad_sequences(sequences, maxlen=max_len, padding="post", truncating="post")
@@ -78,10 +87,10 @@ print("📉 Confusion Matrix:")
 print(confusion_matrix(y_true_labels, y_pred_labels))
 
 # ======== SIMPAN MODEL =========
-model.save("model_sentimen_lstm_terbaru.h5")
+model.save("model_sentimen_lstm.h5")
 
 # ======== SIMPAN TOKENIZER =========
 import joblib
-joblib.dump(tokenizer, "tokenizer_terbaru.joblib")
-print("✅ Tokenizer berhasil disimpan ke tokenizer_terbaru.joblib")
+joblib.dump(tokenizer, "tokenizer.joblib")
+print("✅ Tokenizer berhasil disimpan ke tokenizer.joblib")
 
