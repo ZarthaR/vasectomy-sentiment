@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.csv
+*.xlsx
+*.joblib
+*.h5
+.env
